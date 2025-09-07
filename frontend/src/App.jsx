@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import { Routes,Route } from 'react-router-dom'
 import AuthForm from './components/auth/Form'
@@ -17,15 +17,24 @@ import ShoppingCheckout from './pages/shopping-view/checkout'
 import ShoppingAccount from './pages/shopping-view/account'
 import CheckAuth from './components/common/check-auth'
 import UnauthPage from './pages/unauth-page' 
+import { useDispatch, useSelector } from 'react-redux'
+import { checkAuth } from './store/auth-check'
+import { Skeleton } from "@/components/ui/skeleton"
 
 function App() {
-  const isAuthenticated=false
-  const user=null
   
+ const {user,isAuthenticated,isLoading}=useSelector(state=>state.auth)
+ const dispatch=useDispatch()
+  useEffect(()=>{
+    dispatch(checkAuth())
+  },[dispatch])
+
+  if(isLoading) return <Skeleton className="h-[600px] w-[600px] rounded-full" />
+
 
   return (
     <>
-      <div className='flex felx-col overflow-hidden bg-white'>
+      <div className='w-screen h-screen flex flex-col overflow-hidden bg-white'>
           <Routes>
             <Route path='/' element={<div className="flex items-center justify-center h-screen text-2xl">Welcome to Elanic</div>} />
             <Route path='/auth' element={

@@ -3,6 +3,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -118,3 +119,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+body {
+  font-family: 'Open Sans', sans-serif; /* default font */
+}
+
+
+
+
+

@@ -1,27 +1,20 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from "react-router-dom";
 
-function AuthForm() {
+function AuthLayout() {
   return (
-    <div className="h-screen w-full flex overflow-hidden">
-      {/* Left section (branding) */}
-      <div className="hidden lg:flex w-1/2 items-center justify-center bg-gradient-to-br from-black via-gray-900 to-gray-800">
-        <div className="max-w-md text-center text-white px-6">
-          <h1 className="text-5xl font-bold">Elanic</h1>
-          <p className="text-lg mt-4 text-gray-300">
-            Your one stop shop for all your needs
-          </p>
+    <div className="flex min-h-screen w-full">
+      <div className="hidden lg:flex items-center justify-center bg-black w-1/2 px-12">
+        <div className="max-w-md space-y-6 text-center text-primary-foreground">
+          <h1 className="text-4xl font-extrabold tracking-tight">
+            Welcome to Elanic 
+          </h1>
         </div>
       </div>
-
-      {/* Right section (form) */}
-      <div className="flex w-full lg:w-1/2 items-center justify-center bg-background px-4 overflow-y-auto">
-        <div className="w-full max-w-md">
-          <Outlet />
-        </div>
+      <div className="flex flex-1 items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
+        <Outlet />
       </div>
     </div>
   );
 }
 
-export default AuthForm;
+export default AuthLayout;
