@@ -4,6 +4,7 @@ import './App.css'
 import {BrowserRouter, Route} from "react-router"
 import UserLayout from "./components/layout/UserLayout";
 import { Routes } from "react-router";
+import Home from "./components/pages/Home";
 
 function App() {
   const [count, setCount] = useState(0)
@@ -12,7 +13,8 @@ function App() {
 
       <BrowserRouter>
       <Routes>
-        <Route path="/" element={<UserLayout/>}></Route>
+        <Route path="/" element={<UserLayout/>}>
+        <Route index element={<Home/>}></Route></Route>
       </Routes>
       </BrowserRouter>
   )
