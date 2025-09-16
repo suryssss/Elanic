@@ -15,7 +15,7 @@ const NewArrivals = () => {
   const scrollLeft = useRef(0);
 
   const products = [
-    { _id: "1", name: "StylisH Jacket", price: 2000, image: [{ url: "https://picsum.photos/500/500?random=1" }] },
+    { _id: "1", name: "StylisH Jacket", price: 2000, image: [{ url: "https://picsum.photos/200/500?random=1" }] },
     { _id: "2", name: "StylisH Jacket", price: 2000, image: [{ url: "https://picsum.photos/500/800?random=2" }] },
     { _id: "3", name: "StylisH Jacket", price: 2000, image: [{ url: "https://picsum.photos/500/500?random=3" }] },
     { _id: "4", name: "StylisH Jacket", price: 2000, image: [{ url: "https://picsum.photos/500/500?random=4" }] },
@@ -91,7 +91,7 @@ const NewArrivals = () => {
   }, []);
 
   return (
-    <section>
+    <section className="py-16 px-4 lg:px-0">
       <div className="container mx-auto text-center mb-10 relative">
         <h2 className="text-3xl font-bold mb-4">Explore New Arrivals</h2>
         <p className="text-lg text-gray-500 mb-8">
@@ -121,13 +121,13 @@ const NewArrivals = () => {
 
       <div
         ref={sliderRef}
-        className="container mx-auto overflow-x-scroll flex space-x-6 relative scrollbar-hidden cursor-grab select-none"
+        className={`container mx-auto overflow-x-scroll flex space-x-6 relative scrollbar-hidden ${isDragging ? "cursor-grabbing" : "cursor-grab"} select-none`}
         onMouseDown={handleMouseDown}
       >
         {products.map((product) => (
           <div
             key={product._id}
-            className="min-w-[100%] sm:min-w-[50%] lg:min-w-[33.3333%] relative"
+            className="min-w-[100%] sm:min-w-[50%] lg:min-w-[30%] relative"
           >
             <img
               src={product.image[0].url}
