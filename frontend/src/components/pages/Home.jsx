@@ -4,6 +4,8 @@ import GenderCollect from '../../products/GenderCollect'
 import NewArrivals from '../../products/NewArrivals'
 import BestSeller from '../../products/BestSeller'
 import ProductGrid from '../../products/ProductGrid'
+import FeaturedProducts from '../../products/FeaturedProducts'
+import Features from '../../products/Features'
 
 const topWearsForWomen=[
   {
@@ -92,6 +94,8 @@ const Home = () => {
           <h2 className='text-3xl text-center font-bold mb-4'>Top Wear's for Women</h2>
           <ProductGrid products={topWearsForWomen}/>
         </div>
+        <FeaturedProducts/>
+        <Features/>
     </div>
   )
 }
