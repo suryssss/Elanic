@@ -1,28 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import { HiXMark, HiOutlineTrash } from "react-icons/hi2";
 import { HiMinus } from "react-icons/hi2";
 import { HiPlus } from "react-icons/hi2";
+import { useNavigate } from "react-router";
+import { useCart } from "../../context/CartContext";
 
 const CartScroller = ({ isOpen, toggleCart }) => {
-  // Sample cart items data
-  const [cartItems, setCartItems] = useState([]);
-
-  // Calculate subtotal
-  const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
-
-  // Update item quantity
-  const updateQuantity = (id, newQuantity) => {
-    if (newQuantity < 1) return;
-    
-    setCartItems(cartItems.map(item => 
-      item.id === id ? { ...item, quantity: newQuantity } : item
-    ));
-  };
-
-  // Remove item from cart
-  const removeItem = (id) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
-  };
+  const { cartItems, updateQuantity, removeItem, subtotal, totalItems } = useCart();
+  const navigate=useNavigate();
+  const handleCheckout=()=>{
+    if (cartItems.length === 0) return;
+    toggleCart();
+    navigate("/checkout");
+  }
 
   return (
     <div
@@ -32,7 +22,7 @@ const CartScroller = ({ isOpen, toggleCart }) => {
     >
       {/* Header */}
       <div className="flex items-center justify-between p-5 border-b border-gray-200 bg-gray-50">
-        <h2 className="text-xl font-bold text-gray-800">Your Cart ({cartItems.length})</h2>
+        <h2 className="text-xl font-bold text-gray-800">Your Cart ({totalItems})</h2>
         <button
           onClick={toggleCart}
           className="p-1 rounded-full hover:bg-gray-200 transition-all duration-200"
@@ -55,7 +45,7 @@ const CartScroller = ({ isOpen, toggleCart }) => {
         ) : (
           <div className="space-y-5">
             {cartItems.map((item) => (
-              <div key={item.id} className="flex gap-4 pb-5 border-b border-gray-100">
+              <div key={item.lineId} className="flex gap-4 pb-5 border-b border-gray-100">
                 <img 
                   src={item.image} 
                   alt={item.name}
@@ -65,7 +55,7 @@ const CartScroller = ({ isOpen, toggleCart }) => {
                   <div className="flex justify-between">
                     <h3 className="font-medium text-gray-900">{item.name}</h3>
                     <button 
-                      onClick={() => removeItem(item.id)}
+                      onClick={() => removeItem(item.lineId)}
                       className="text-gray-400 hover:text-red-500 transition-colors"
                       aria-label="Remove item"
                     >
@@ -76,7 +66,7 @@ const CartScroller = ({ isOpen, toggleCart }) => {
                   <div className="flex items-center justify-between mt-3">
                     <div className="flex items-center border rounded-md">
                       <button 
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        onClick={() => updateQuantity(item.lineId, item.quantity - 1)}
                         className="p-1 text-gray-600 hover:text-black hover:bg-gray-100 transition-colors"
                         aria-label="Decrease quantity"
                       >
@@ -84,7 +74,7 @@ const CartScroller = ({ isOpen, toggleCart }) => {
                       </button>
                       <span className="px-2 w-8 text-center">{item.quantity}</span>
                       <button 
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        onClick={() => updateQuantity(item.lineId, item.quantity + 1)}
                         className="p-1 text-gray-600 hover:text-black hover:bg-gray-100 transition-colors"
                         aria-label="Increase quantity"
                       >
@@ -114,6 +104,7 @@ const CartScroller = ({ isOpen, toggleCart }) => {
               : "bg-black text-white hover:bg-gray-800"
           }`}
           disabled={cartItems.length === 0}
+          onClick={handleCheckout}
         >
           {cartItems.length === 0 ? "Cart is Empty" : "Proceed to Checkout"}
         </button>

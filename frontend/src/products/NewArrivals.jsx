@@ -15,13 +15,13 @@ const NewArrivals = () => {
   const scrollLeft = useRef(0);
 
   const products = [
-    { _id: "1", name: "StylisH Jacket", price: 2000, image: [{ url: "https://picsum.photos/200/500?random=1" }] },
-    { _id: "2", name: "StylisH Jacket", price: 2000, image: [{ url: "https://picsum.photos/500/800?random=2" }] },
-    { _id: "3", name: "StylisH Jacket", price: 2000, image: [{ url: "https://picsum.photos/500/500?random=3" }] },
-    { _id: "4", name: "StylisH Jacket", price: 2000, image: [{ url: "https://picsum.photos/500/500?random=4" }] },
-    { _id: "5", name: "StylisH Jacket", price: 2000, image: [{ url: "https://picsum.photos/500/500?random=5" }] },
-    { _id: "6", name: "StylisH Jacket", price: 2000, image: [{ url: "https://picsum.photos/500/500?random=6" }] },
-    { _id: "7", name: "StylisH Jacket", price: 2000, image: [{ url: "https://picsum.photos/500/500?random=7" }] },
+    { _id: "1", name: "StylisH Jacket", price: 199, image: [{ url: "https://picsum.photos/200/500?random=1" }] },
+    { _id: "2", name: "StylisH Jacket", price: 299, image: [{ url: "https://picsum.photos/500/800?random=2" }] },
+    { _id: "3", name: "StylisH Jacket", price: 149, image: [{ url: "https://picsum.photos/500/500?random=3" }] },
+    { _id: "4", name: "StylisH Jacket", price: 49, image: [{ url: "https://picsum.photos/500/500?random=4" }] },
+    { _id: "5", name: "StylisH Jacket", price: 189, image: [{ url: "https://picsum.photos/500/500?random=5" }] },
+    { _id: "6", name: "StylisH Jacket", price: 399, image: [{ url: "https://picsum.photos/500/500?random=6" }] },
+    { _id: "7", name: "StylisH Jacket", price: 199, image: [{ url: "https://picsum.photos/500/500?random=7" }] },
   ];
 
   // --- DRAG HANDLERS ---
@@ -137,7 +137,7 @@ const NewArrivals = () => {
             <div className="absolute bottom-0 left-0 right-0 bg-opacity-50 backdrop-blur-md text-white p-4 rounded-b-lg">
               <Link to={`/products/${product._id}`} className="block">
                 <h3 className="font-medium">{product.name}</h3>
-                <p className="mt-1">₹{product.price}</p>
+                <p className="mt-1">${product.price}</p>
               </Link>
             </div>
           </div>

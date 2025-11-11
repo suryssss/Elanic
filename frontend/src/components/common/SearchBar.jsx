@@ -40,7 +40,7 @@ const SearchBar = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full bg-gray-100 text-gray-900 px-3 py-1.5 pr-10 pl-9 rounded-lg border border-gray-300 shadow-sm 
-                       focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm transition"
+                       focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 text-sm transition"
           />
 
           {/* Search icon */}

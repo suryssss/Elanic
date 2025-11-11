@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner';
 import ProductGrid from './ProductGrid';
+import { useCart } from '../context/CartContext';
 
 
 const selectProduct={
@@ -14,8 +15,8 @@ const selectProduct={
     altText:"Jacket"
   }
 ],
-  price:2000,
-  originalPrice:2500,
+  price:199,
+  originalPrice:299,
   description:"Awesome New stylish Jacket",
   brand:"StylisH",
   material:"Leather",
@@ -27,7 +28,7 @@ const similarProducts=[
   {
     _id:1,
     name:"Product 1",
-    price:1000,
+    price:99,
     images:[{
       url:"https://picsum.photos/500/500?random=4",
       altText:"Product 1"
@@ -36,7 +37,7 @@ const similarProducts=[
   {
     _id:2,
     name:"Product 2",
-    price:2000,
+    price:299,
     images:[{
       url:"https://picsum.photos/500/500?random=5",
       altText:"Product 2"
@@ -45,7 +46,7 @@ const similarProducts=[
   {
     _id:3,
     name:"Product 3",
-    price:3000,
+    price:199,
     images:[{
       url:"https://picsum.photos/500/500?random=6",
       altText:"Product 3"
@@ -54,7 +55,7 @@ const similarProducts=[
   {
     _id:4,
     name:"Product 4",
-    price:4000,
+    price:149,
     images:[{
       url:"https://picsum.photos/500/500?random=7",
       altText:"Product 4"
@@ -69,6 +70,7 @@ const BestSeller = () => {
   const[selectColor,setSelectColor]=useState("");
   const[quantity,setQuantity]=useState(1);
   const[isButtonDisabled,setIsButtonDisabled]=useState(false);
+  const { addToCart } = useCart();
 
   const handleQuantityChange=(type)=>{
     if(type==="plus"){
@@ -87,11 +89,25 @@ const BestSeller = () => {
       return;
     }
     setIsButtonDisabled(true)
+    const productImage = mainImage || selectProduct.image?.[0]?.url || "";
+    const productId = selectProduct._id ?? selectProduct.name.toLowerCase();
+
+    addToCart({
+      productId,
+      name: selectProduct.name,
+      price: selectProduct.price,
+      image: productImage,
+      size: selectSize,
+      color: selectColor,
+      quantity,
+    });
+
     setTimeout(()=>{
       toast.success("Product added to cart",{
         duration:1000,
       })
       setIsButtonDisabled(false)
+      setQuantity(1)
     },500)
   }
   
@@ -141,8 +157,8 @@ const BestSeller = () => {
           <div className='md:w-1/2 md:ml-10 '>
             <h1 className='text-2xl md:text-3xl font-semibold mb-2'>{selectProduct.name}</h1>
             <p className='text-gray-600 mb-3'>{selectProduct.description}</p>
-            <p className='text-lg text-gray-600 font-semibold mb-1 line-through '>₹{selectProduct.originalPrice && `${selectProduct.originalPrice}`}</p>
-            <p className='text-xl text-gray-500 font-semibold mb-2'>₹{selectProduct.price}</p>
+            <p className='text-lg text-gray-600 font-semibold mb-1 line-through '>${selectProduct.originalPrice && `${selectProduct.originalPrice}`}</p>
+            <p className='text-xl text-gray-500 font-semibold mb-2'>${selectProduct.price}</p>
             <div className='mb-3'>
             <p className='text-gray-700'>Color:</p>
               <div className='flex gap-2 mt-2'>

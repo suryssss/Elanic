@@ -1,17 +1,26 @@
-import React, { useState } from "react";
-import { Link } from "react-router";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router";
 import { HiOutlineUser, HiOutlineShoppingBag, HiBars3, HiXMark } from "react-icons/hi2";
-import SearchBar from "../common/SearchBar";
-import CartScroller from "../common/CartScroller";
+import SearchBar from "./SearchBar";
+import CartScroller from "../layout/CartScroller";
+import { useCart } from "../../context/CartContext";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const [cartOpen, setCartOpen] = useState(false);
+  const location = useLocation();
+  const { totalItems } = useCart();
 
   const toggleCart = () => {
     setCartOpen(!cartOpen);
   };
+
+  useEffect(() => {
+    if (location.pathname === "/checkout" || location.pathname === "/order-confirmation") {
+      setCartOpen(false);
+    }
+  }, [location.pathname]);
 
   return (
     <>
@@ -60,9 +69,11 @@ const Navbar = () => {
 
           <button className="hover:text-black relative" onClick={toggleCart}>
             <HiOutlineShoppingBag className="h-5 w-5" />
-            <span className="absolute -top-1 -right-2 bg-[#ea2e0e] text-white text-xs rounded-full px-1.5 py-0.2">
-              2
-            </span>
+            {totalItems > 0 && (
+              <span className="absolute -top-1 -right-2 bg-[#ea2e0e] text-white text-xs rounded-full px-1.5 py-0.5">
+                {totalItems}
+              </span>
+            )}
           </button>
 
           <Link to="/profile" className="hover:text-black">

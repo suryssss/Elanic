@@ -11,7 +11,7 @@ const topWearsForWomen=[
   {
     _id:1,
     name:"Product 1",
-    price:1000,
+    price:199,
     images:[{
       url:"https://picsum.photos/500/500?random=4",
       altText:"Product 1"
@@ -20,7 +20,7 @@ const topWearsForWomen=[
   {
     _id:2,
     name:"Product 2",
-    price:2000,
+    price:149,
     images:[{
       url:"https://picsum.photos/500/500?random=5",
       altText:"Product 2"
@@ -29,7 +29,7 @@ const topWearsForWomen=[
   {
     _id:3,
     name:"Product 3",
-    price:3000,
+    price:299,
     images:[{
       url:"https://picsum.photos/500/500?random=9",
       altText:"Product 3"
@@ -38,7 +38,7 @@ const topWearsForWomen=[
   {
     _id:4,
     name:"Product 4",
-    price:4000,
+    price:99,
     images:[{
       url:"https://picsum.photos/500/500?random=8",
       altText:"Product 4"
@@ -47,7 +47,7 @@ const topWearsForWomen=[
   {
     _id:5,
     name:"Product 5",
-    price:1000,
+    price:299,
     images:[{
       url:"https://picsum.photos/500/500?random=4",
       altText:"Product 1"
@@ -56,7 +56,7 @@ const topWearsForWomen=[
   {
     _id:6,
     name:"Product 6",
-    price:2000,
+    price:499,
     images:[{
       url:"https://picsum.photos/500/500?random=5",
       altText:"Product 2"
@@ -65,7 +65,7 @@ const topWearsForWomen=[
   {
     _id:7,
     name:"Product 7",
-    price:3000,
+    price:399,
     images:[{
       url:"https://picsum.photos/500/500?random=6",
       altText:"Product 3"
@@ -74,7 +74,7 @@ const topWearsForWomen=[
   {
     _id:8,
     name:"Product 8",
-    price:4000,
+    price:159,
     images:[{
       url:"https://picsum.photos/500/500?random=7",
       altText:"Product 4"

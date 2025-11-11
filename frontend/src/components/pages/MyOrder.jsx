@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-
+import { useNavigate } from 'react-router'
 const MyOrder = () => {
   const [orders, setOrders] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     setTimeout(() => {
@@ -37,6 +38,10 @@ const MyOrder = () => {
     }, 1000)
   }, [])
 
+  const handleOrderClick = (orderId) => {
+    navigate(`/order/${orderId}`)
+  }
+
   return (
     <div className='max-w-7xl mx-auto p-4 sm:p-6'>
       <h2 className='text-xl sm:text-2xl font-bold mb-6'>
@@ -57,7 +62,9 @@ const MyOrder = () => {
           <tbody>
             {orders.length > 0 ? (
               orders.map((order) => (
-                <tr key={order._id} className='border-b hover:border-gray-500 cursor-pointer'>
+                <tr key={order._id} 
+                  onClick={()=> handleOrderClick(order._id)}
+                className='border-b hover:border-gray-500 cursor-pointer'>
                   <td className='py-2 px-2 sm:py-4 sm:px-4 '>
                     <img src={order.orderItems[0].image} alt={order.orderItems[0].name} className='w-10 h-10 sm:h-12 object-cover rounded-lg'/>
                   </td>

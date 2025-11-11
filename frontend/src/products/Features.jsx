@@ -11,7 +11,7 @@ const Features = () => {
             <HiShoppingBag className='text-3xl text-gray-700' />
           </div>     
           <h4 className='tracking-tighter mb-2 font-semibold'>FREE SHIPPING</h4>
-          <p className='text-sm text-gray-500 tracking-tighter'>On orders over ₹1000</p>
+          <p className='text-sm text-gray-500 tracking-tighter'>On orders over $500</p>
         </div>
 
         <div className='flex flex-col items-center'>
