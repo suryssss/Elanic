@@ -59,9 +59,13 @@ const Navbar = () => {
             Contact
           </Link>
         </div>
+        
 
         {/* Icons */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 ">
+                    <Link to="/admin" className="block text-white text-sm bg-black px-2 rounded">
+          Admin
+            </Link>
           {/* Search Bar - hidden on small */}
           <div className="hidden md:block">
             <SearchBar />
