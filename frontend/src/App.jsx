@@ -15,6 +15,7 @@ import { CartProvider } from "./context/CartContext"
 import OrderDetailsPage from "./components/pages/OrderDetailsPage"
 import MyOrder from "./components/pages/MyOrder"
 import AdminLayout from "./components/admin/AdminLayout"
+import AdminHomePage from "./components/pages/AdminHomePage"
 
 function App() {
 
@@ -35,7 +36,8 @@ function App() {
             <Route path="order/:id" element={<OrderDetailsPage />}/>
             <Route path="/my-orders" element={<MyOrder />}/>
           </Route>
-          <Route path="/admin" element={<AdminLayout />}/>
+          <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminHomePage />}/></Route>
         </Routes>
       </BrowserRouter>
     </CartProvider>
