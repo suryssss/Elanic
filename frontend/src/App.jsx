@@ -16,6 +16,8 @@ import OrderDetailsPage from "./components/pages/OrderDetailsPage"
 import MyOrder from "./components/pages/MyOrder"
 import AdminLayout from "./components/admin/AdminLayout"
 import AdminHomePage from "./components/pages/AdminHomePage"
+import UserManage from "./components/admin/UserManage"
+import ProductManage from "./components/admin/ProductManage"
 
 function App() {
 
@@ -37,7 +39,9 @@ function App() {
             <Route path="/my-orders" element={<MyOrder />}/>
           </Route>
           <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminHomePage />}/></Route>
+          <Route index element={<AdminHomePage />}/>
+          <Route path="users" element={<UserManage/>}/>
+          <Route path="products" element={<ProductManage/>}/></Route>
         </Routes>
       </BrowserRouter>
     </CartProvider>
