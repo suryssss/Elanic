@@ -1,10 +1,11 @@
 const mongoose=require("mongoose")
 
-const checkoutItemSchema=new mongoose.Schema({
+
+const orderItemSchema=new mongoose.Schema({
     productId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Product",
-        required:true
+        required:true,
     },
     name:{
         type:String,
@@ -18,21 +19,21 @@ const checkoutItemSchema=new mongoose.Schema({
         type:String,
         required:true,
     },
+    size:String,
+    color:String,
     quantity:{
         type:Number,
         required:true,
     },
-},
-{_id:false})
+},{_id:false})
 
-
-const checkoutSchema=new mongoose.Schema({
+const orderSchema=new mongoose.Schema({
     user:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User",
         required:true,
     },
-    checkoutItems:[checkoutItemSchema],
+    orderItems:[orderItemSchema],
     shippingAddress:{
         address:{type:String,required:true},
         city:{type:String,required:true},
@@ -54,23 +55,22 @@ const checkoutSchema=new mongoose.Schema({
     paidAt:{
         type:Date,
     },
+    isDelivered:{
+        type:Boolean,
+        default:false,
+    },
+    deliveredAt:{
+        type:Date,
+    },
     paymentStatus:{
         type:String,
         default:"pending",
     },
-    paymentDetails:{
-        type:mongoose.Schema.Types.Mixed,
+    status:{
+        type:String,
+        enum:["Processing","Shipped","Delivered","Cancelled"],
+        default:"Processing",
     },
-    isFinalized:{
-        type:Boolean,
-        default:false,
-    },
-    finalizedAt:{
-        type:Date,
-    },
-},
-{timestamps:true}
-)
+},{timestamps:true})
 
-
-module.exports=mongoose.model("Checkout",checkoutSchema)
+module.exports=mongoose.model("Order",orderSchema)

@@ -8,6 +8,9 @@ dotenv.config()
 const userRoute=require("./routes/userRoute")
 const productRoute=require("./routes/productRoute")
 const cartRoute=require("./routes/cartRoute")
+const checkoutRoute=require("./routes/checkoutRoute")
+const orderRoute=require("./routes/orderRoute")
+const uploadRoute=require("./routes/uploadRoute")
 
 const app=express()
 app.use(express.json())
@@ -27,6 +30,9 @@ app.get("/",(req,res)=>{
 app.use("/api/user",userRoute)
 app.use("/api/products",productRoute)
 app.use("/api/cart",cartRoute)
+app.use("/api/checkout",checkoutRoute)
+app.use("/api/orders",orderRoute)
+app.use("/api/upload",uploadRoute)
 
 
 app.listen(PORT,()=>console.log(`Server running on port ${PORT}`))
