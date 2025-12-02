@@ -30,7 +30,7 @@ const cartSchema=new mongoose.Schema({
     products:[cartItemSchema],
     totalPrice:{
         type:Number,
-        requried:true,
+        required:true,
         default:0,
     },
     },
@@ -40,4 +40,4 @@ const cartSchema=new mongoose.Schema({
 )
 
 
-module.exports=mongoose.model('cart',cartItemSchema)
+module.exports=mongoose.model('cart',cartSchema)
