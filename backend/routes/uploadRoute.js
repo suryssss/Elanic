@@ -1,7 +1,9 @@
 const express=require("express")
 const multer=require("multer")
-const cloudinary=require("cloudinary")
+const cloudinary=require("cloudinary").v2
 const streamifier=require("streamifier")
+
+const router=express.Router()
 
 
 require("dotenv").config()
@@ -13,6 +15,8 @@ cloudinary.config({
 })
 
 
+
+
 const storage=multer.memoryStorage()
 const upload=multer({storage})
 
@@ -21,7 +25,6 @@ router.post("/",upload.single('image'),async(req,res)=>{
         if(!req.file){
             return res.status(400).json({message:"No file uploaded"})
         }
-
         const streamUpload=(fileBuffer)=>{
             return new Promise((resolve,reject)=>{
                 const stream=cloudinary.uploader.upload_stream((error,result)=>{
@@ -44,3 +47,5 @@ router.post("/",upload.single('image'),async(req,res)=>{
         res.status(500).json({message:"Failed to upload image"})
     }
 })
+
+module.exports=router
