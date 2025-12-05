@@ -4,66 +4,10 @@ import ProductGrid from './ProductGrid';
 import { useCart } from '../context/CartContext';
 
 
-const selectProduct={
-  name:"Jacket",
-  image:[{
-    url:"https://picsum.photos/500/500?random=1",
-    altText:"Jacket"
-  },
-  {
-    url:"https://picsum.photos/500/500?random=2",
-    altText:"Jacket"
-  }
-],
-  price:199,
-  originalPrice:299,
-  description:"Awesome New stylish Jacket",
-  brand:"StylisH",
-  material:"Leather",
-  sizes:["S","M","L","XL","XXL"],
-  colors:["Black","Red"],
-}
 
-const similarProducts=[
-  {
-    _id:1,
-    name:"Product 1",
-    price:99,
-    images:[{
-      url:"https://picsum.photos/500/500?random=4",
-      altText:"Product 1"
-    }]
-  },
-  {
-    _id:2,
-    name:"Product 2",
-    price:299,
-    images:[{
-      url:"https://picsum.photos/500/500?random=5",
-      altText:"Product 2"
-    }]
-  },
-  {
-    _id:3,
-    name:"Product 3",
-    price:199,
-    images:[{
-      url:"https://picsum.photos/500/500?random=6",
-      altText:"Product 3"
-    }]
-  },
-  {
-    _id:4,
-    name:"Product 4",
-    price:149,
-    images:[{
-      url:"https://picsum.photos/500/500?random=7",
-      altText:"Product 4"
-    }]
-  },
-]
 
-const BestSeller = () => {
+const BestSeller = ({productId}) => {
+  const {id}=useParams()
 
   const [mainImage,setMainImage]=useState(null);
   const[selectSize,setSelectSize]=useState("");
