@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const { protect, admin } = require("../middleware/authMiddleWare");
 const Product = require("../models/Product");
 
@@ -205,16 +206,28 @@ router.get("/", async (req, res) => {
 
 router.get('/best-seller', async (req, res) => {
   try {
-    const bestSeller = await Product.findOne().sort({ rating: -1 })
+    // First try to find published products with rating
+    let bestSeller = await Product.findOne({ isPublished: true }).sort({ rating: -1, createdAt: -1 })
+    
+    // If no published products, try any product with rating
+    if (!bestSeller) {
+      bestSeller = await Product.findOne().sort({ rating: -1, createdAt: -1 })
+    }
+    
+    // If still no product, try any product
+    if (!bestSeller) {
+      bestSeller = await Product.findOne().sort({ createdAt: -1 })
+    }
+    
     if (bestSeller) {
       res.json(bestSeller)
     }
     else{
-      res.status(404).json({ message: "Product not found" })
+      res.status(404).json({ message: "No best seller product found" })
     }
   } catch (error) {
     console.error(error)
-    res.status(500).send("Server Error")
+    res.status(500).json({ message: "Server Error" })
   }
 })
 
@@ -229,9 +242,56 @@ router.get('/new-arrivals',async(req,res)=>{
   }
 })
 
-router.get("/:id", async (req, res) => {
+router.get('/similar/:id', async (req, res) => {
+  const { id } = req.params;
+  const { limit } = req.query;
+  
+  // Check if id exists and is not undefined/null/empty
+  if (!id || id === 'undefined' || id === 'null') {
+    return res.status(400).json({ message: "Product ID is required" });
+  }
+  
+  // Validate ObjectId format
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "Invalid product ID format" });
+  }
+  
+  const limitNum = limit ? parseInt(limit) : 4;
+  
   try {
-    const product = await Product.findById(req.params.id)
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" })
+    }
+
+    const similarProducts = await Product.find({
+      _id: { $ne: id },
+      gender: product.gender,
+      category: product.category,
+    }).limit(limitNum);
+
+    res.json(similarProducts)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: "Server Error" })
+  }
+})
+
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  
+  // Check if id exists and is not undefined/null/empty
+  if (!id || id === 'undefined' || id === 'null') {
+    return res.status(400).json({ message: "Product ID is required" });
+  }
+  
+  // Validate ObjectId format
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "Invalid product ID format" });
+  }
+  
+  try {
+    const product = await Product.findById(id)
     if (product) {
       res.json(product)
     }
@@ -241,32 +301,7 @@ router.get("/:id", async (req, res) => {
   }
   catch (error) {
     console.error(error)
-    res.status(500).send("Server Error")
-  }
-})
-
-
-router.get('/similar/:id', async (req, res) => {
-  const { id } = req.params;
-  console.log(id)
-  try {
-    const product = await Product.findById(id);
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" })
-    }
-
-
-
-    const similarProducts = await Product.find({
-      _id: { $ne: id },
-      gender: product.gender,
-      category: product.category,
-    }).limit(4);
-
-    res.json(similarProducts)
-  } catch (error) {
-    console.error(error)
-    res.status(500).send("Server Error")
+    res.status(500).json({ message: "Server Error" })
   }
 })
 

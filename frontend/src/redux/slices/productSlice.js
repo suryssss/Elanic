@@ -42,11 +42,15 @@ export const fetchProductsByFilters=createAsyncThunk(
 
 
 export const fetchProductDetails=createAsyncThunk("products/fetchProductDetails",
-    async(id)=>{
-        const response =await axios.get(
-            `${import.meta.env.VITE_BACKEND_URL}/api/products/${id}`
-        );
-        return response.data
+    async(id,{rejectWithValue})=>{
+        try {
+            const response =await axios.get(
+                `${import.meta.env.VITE_BACKEND_URL}/api/products/${id}`
+            );
+            return response.data
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || error.message || "Failed to fetch product details")
+        }
     }
 )
 
@@ -68,8 +72,9 @@ export const updateProducts=createAsyncThunk("products/updateProducts",
 
 export const fetchSimilarProducts=createAsyncThunk("products/fetchSimilarProducts",
     async({id,limit})=>{
+        const queryParams = limit ? `?limit=${limit}` : '';
         const response =await axios.get(
-            `${import.meta.env.VITE_BACKEND_URL}/api/products/similar/${id}/${limit}`
+            `${import.meta.env.VITE_BACKEND_URL}/api/products/similar/${id}${queryParams}`
         );
         return response.data
     }

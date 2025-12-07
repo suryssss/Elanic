@@ -8,7 +8,6 @@ import Login from "./components/pages/Login"
 import Register from "./components/pages/Register"
 import Profile from "./components/pages/Profile"
 import Collection from "./components/pages/Collection"
-import ProductDetails from "./products/ProductDetails"
 import Checkout from "./components/cart/Checkout"
 import OrderConfirmation from "./components/pages/OrderConfirmation"
 import { CartProvider } from "./context/CartContext"
@@ -23,6 +22,7 @@ import OrderManagement from "./components/admin/OrderManagement"
 
 import {Provider} from "react-redux"
 import store from "./redux/store"
+import ProductDetails from "./products/ProductDetails"
 
 function App() {
 
@@ -38,11 +38,11 @@ function App() {
             <Route path="register" element={<Register />} />
             <Route path="profile" element={<Profile />}/>
             <Route path="collections/:collection" element={<Collection />}/>
-            <Route path="product/:id" element={<ProductDetails />}/>
+            <Route path="product/:id" element={<ProductDetails/>}/>
             <Route path="checkout" element={<Checkout />}/>
             <Route path="order-confirmation" element={<OrderConfirmation />}/>
             <Route path="order/:id" element={<OrderDetailsPage />}/>
-            <Route path="/my-orders" element={<MyOrder />}/>
+            <Route path="my-orders" element={<MyOrder />}/>
           </Route>
           <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminHomePage />}/>
