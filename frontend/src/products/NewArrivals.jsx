@@ -29,7 +29,6 @@ const NewArrivals = () => {
     fetchNewArrivals();
   }, []);
 
-  // DRAG HANDLERS
   const handleMouseDown = (e) => {
     if (!sliderRef.current) return;
     e.preventDefault();
@@ -64,8 +63,7 @@ const NewArrivals = () => {
     window.removeEventListener("mousemove", handleMouseMove);
     window.removeEventListener("mouseup", handleMouseUp);
   };
-
-  // SCROLL BUTTONS
+  
   const scroll = (direction) => {
     const scrollAmount = direction === "left" ? -300 : 300;
     sliderRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
@@ -99,63 +97,73 @@ const NewArrivals = () => {
 
   return (
     <section className="py-16 px-4 lg:px-0">
-      <div className="container mx-auto text-center mb-10 relative">
-        <h2 className="text-3xl font-bold mb-4">Explore New Arrivals</h2>
-        <p className="text-lg text-gray-500 mb-8">
-          Discover our latest arrivals with fast shipping
-        </p>
+  <div className="container mx-auto text-center mb-10">
+    <h2 className="text-3xl font-bold mb-4">Explore New Arrivals</h2>
+    <p className="text-lg text-gray-500 mb-8">
+      Discover our latest arrivals with fast shipping
+    </p>
+  </div>
 
-        {/* Scroll buttons */}
-        <div className="absolute right-0 bottom-[-30px] flex space-x-2">
-          <button
-            onClick={() => scroll("left")}
-            disabled={!canScrollLeft}
-            className={`p-2 rounded border bg-white text-black ${
-              !canScrollLeft && "opacity-50 cursor-not-allowed"
-            }`}
-          >
-            <FiChevronLeft className="text-2xl" />
-          </button>
+  {/* WRAPPER (relative to place arrows left/right) */}
+  <div className="relative container mx-auto">
 
-          <button
-            onClick={() => scroll("right")}
-            disabled={!canScrollRight}
-            className={`p-2 rounded border bg-white text-black ${
-              !canScrollRight && "opacity-50 cursor-not-allowed"
-            }`}
-          >
-            <FiChevronRight className="text-2xl" />
-          </button>
-        </div>
-      </div>
+    {/* LEFT ARROW */}
+    <button
+      onClick={() => scroll("left")}
+      disabled={!canScrollLeft}
+      className={`absolute left-2 top-1/2 -translate-y-1/2 p-3 bg-white shadow-lg rounded-full z-20 ${
+        !canScrollLeft && "opacity-50 cursor-not-allowed"
+      }`}
+    >
+      <FiChevronLeft className="text-2xl" />
+    </button>
 
-      <div
-        ref={sliderRef}
-        className={`container mx-auto overflow-x-scroll flex space-x-6 relative scrollbar-hidden ${
-          isDragging ? "cursor-grabbing" : "cursor-grab"
-        } select-none`}
-        onMouseDown={handleMouseDown}
+    {/* RIGHT ARROW */}
+    <button
+      onClick={() => scroll("right")}
+      disabled={!canScrollRight}
+      className={`absolute right-2 top-1/2 -translate-y-1/2 p-3 bg-white shadow-lg rounded-full z-20 ${
+        !canScrollRight && "opacity-50 cursor-not-allowed"
+      }`}
+    >
+      <FiChevronRight className="text-2xl" />
+    </button>
+
+    {/* CAROUSEL */}
+    <div
+      ref={sliderRef}
+      className={`overflow-x-scroll flex space-x-6 scrollbar-hidden ${
+        isDragging ? "cursor-grabbing" : "cursor-grab"
+      } select-none`}
+      onMouseDown={handleMouseDown}
+    >
+      {newArrivals.map((product) => (
+        <div
+        key={product._id}
+        className="min-w-[260px] md:min-w-[300px] lg:min-w-[350px] flex flex-col"
       >
-        {newArrivals.map((product) => (
-          <div
-            key={product._id}
-            className="min-w-[100%] sm:min-w-[50%] lg:min-w-[30%] relative"
-          >
-            <img
-              src={product?.images?.[0]?.url || "/placeholder.jpg"}
-              alt={product.name}
-              className="w-full h-[500px] object-cover rounded-lg select-none pointer-events-none"
-            />
-            <div className="absolute bottom-0 left-0 right-0 bg-opacity-50 backdrop-blur-md text-white p-4 rounded-b-lg">
-              <Link to={`/products/${product._id}`} className="block">
-                <h3 className="font-medium">{product.name}</h3>
-                <p className="mt-1">${product.price}</p>
-              </Link>
-            </div>
-          </div>
-        ))}
+        <img
+          src={product?.images?.[0]?.url || "/placeholder.jpg"}
+          alt={product.name}
+          className="w-full h-[420px] object-cover rounded-lg pointer-events-none"
+        />
+      
+        {/* TEXT BELOW IMAGE */}
+        <Link to={`/products/${product._id}`} className="mt-3 block text-left">
+          <h3 className="text-[16px] font-medium text-black">
+            {product.name}
+          </h3>
+          <p className="text-[15px] text-black mt-1">
+            ${product.price}
+          </p>
+        </Link>
       </div>
-    </section>
+      
+      ))}
+    </div>
+  </div>
+</section>
+
   );
 };
 

@@ -11,9 +11,9 @@ const FilterOption = () => {
     color: "",
     size: [],
     brand: [],
-    min: 0,
-    max: 5000,
-    rating: 0,
+    minPrice: 0,
+    maxPrice: 5000,
+    rating: "",
   });
 
   const [priceRange, setPriceRange] = useState([0, 5000]);
@@ -41,37 +41,45 @@ const FilterOption = () => {
       color: params.color || "",
       size: params.size ? params.size.split(",") : [],
       brand: params.brand ? params.brand.split(",") : [],
-      min: params.min ? Number(params.min) : 0,
-      max: params.max ? Number(params.max) : 5000,
-      rating: params.rating ? Number(params.rating) : 0,
+      minPrice: params.minPrice ? Number(params.minPrice) : 0,
+      maxPrice: params.maxPrice ? Number(params.maxPrice) : 5000,
+      rating: params.rating || "",
     });
-    setPriceRange([0, params.max || 5000]);
+    setPriceRange([0, params.maxPrice || 5000]);
   }, [search]);
 
   const handleFilterChange = (e) => {
     const { name, value, checked, type } = e.target;
-    let newFilters={...filter}
-    if(type==="checkbox"){
-      if (checked){
-      newFilters[name]=[...(newFilters[name]|| []),value]
-    }else {
-      newFilters[name]=newFilters[name].filter((item)=> item !== value)
-    }
-  }else{
-    newFilters[name]=value
-  }
-  setFilter(newFilters)
+    let newFilters = { ...filter };
 
-  updateUrl(newFilters)
+    if (type === "checkbox") {
+      if (checked) {
+        newFilters[name] = [...(newFilters[name] || []), value];
+      } else {
+        newFilters[name] = newFilters[name].filter((item) => item !== value);
+      }
+    } else {
+      newFilters[name] = value;
+    }
+
+    setFilter(newFilters);
+    updateUrl(newFilters);
   };
 
   const updateUrl=(newFilters)=>{
     const params=new URLSearchParams(search)
     Object.keys(newFilters).forEach((key)=>{
-      if(Array.isArray(newFilters[key]) && newFilters[key].length>0){
-        params.set(key,newFilters[key].join(","))
-      }else if (newFilters[key]){
-        params.set(key,newFilters[key])
+      const value = newFilters[key]
+      if (Array.isArray(value)) {
+        if (value.length > 0) {
+          params.set(key, value.join(","))
+        } else {
+          params.delete(key)
+        }
+      } else if (value !== "" && value !== null && value !== undefined) {
+        params.set(key, value)
+      } else {
+        params.delete(key)
       }
     })
     setSearch(params)
@@ -81,7 +89,7 @@ const FilterOption = () => {
   const handlePriceChange=(e)=>{
      const newPrice=e.target.value
      setPriceRange([0,newPrice])
-     const newFilters={...filter,min:0,max:newPrice}
+     const newFilters={...filter,minPrice:0,maxPrice:newPrice}
      setFilter(newFilters)
      updateUrl(newFilters)
   }
@@ -197,10 +205,11 @@ const FilterOption = () => {
           {[5, 4, 3, 2, 1].map((rating) => (
             <label key={rating} className="flex items-center cursor-pointer">
               <input
-                type="checkbox"
+                type="radio"
                 name="rating"
                 value={rating}
                 onChange={handleFilterChange}
+                checked={Number(filter.rating) === rating}
                 className="mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300"
               />
               <span className="text-gray-700">{rating}★</span>

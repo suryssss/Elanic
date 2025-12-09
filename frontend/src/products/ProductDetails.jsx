@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner';
 import ProductGrid from './ProductGrid';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductDetails, fetchSimilarProducts } from '../redux/slices/productSlice';
 import { useParams } from 'react-router';
 import { addProductToCart } from '../redux/slices/cartSlice';
-
-
-
 
 
 const ProductDetails = ({productId}) => {
@@ -29,7 +26,6 @@ const ProductDetails = ({productId}) => {
       dispatch(fetchSimilarProducts({id:productFetchId}))
     }
   },[dispatch,productFetchId])
-
 
 
   useEffect(() => {
@@ -92,9 +88,6 @@ const ProductDetails = ({productId}) => {
   if(!selectedProduct && !loading){
     return <div className='p-6 text-center'><p className='text-gray-500'>Product not found</p></div>
   }
-
-  
-
   return (
     <div className='p-6'>
       {selectedProduct && (
@@ -184,7 +177,6 @@ const ProductDetails = ({productId}) => {
         </div>
       </div>
       )}
-        
     </div>
   )
 }

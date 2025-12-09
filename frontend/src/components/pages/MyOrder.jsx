@@ -1,45 +1,48 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchUserOrder } from '../../redux/slices/orderSlice'
+import { toast } from 'sonner'
+
 const MyOrder = () => {
-  const [orders, setOrders] = useState([])
+  const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { orders, loading, error } = useSelector((state) => state.orders)
 
   useEffect(() => {
-    setTimeout(() => {
-      const mockOrders = [
-        {
-          _id: "12345",
-          createdAt: new Date(),
-          shippingAddress: { city: "Hyderabad", country: "India" },
-          orderItems: [
-            {
-              name: "product 1",
-              image: "https://picsum.photos/500/500?random=1"
-            },
-          ],
-          totalPrice: 1999,
-          isPaid: true,
-        },
-        {
-          _id: "54321",
-          createdAt: new Date(),
-          shippingAddress: { city: "Banglore", country: "India" },
-          orderItems: [
-            {
-              name: "product 2",
-              image: "https://picsum.photos/500/500?random=3"
-            },
-          ],
-          totalPrice: 999,
-          isPaid: false,
-        },
-      ]
-      setOrders(mockOrders)
-    }, 1000)
-  }, [])
+    const token = localStorage.getItem("userToken")
+    if (!token) {
+      navigate("/login")
+      return
+    }
+    dispatch(fetchUserOrder())
+  }, [dispatch, navigate])
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error?.message || "Failed to fetch orders")
+    }
+  }, [error])
 
   const handleOrderClick = (orderId) => {
     navigate(`/order/${orderId}`)
+  }
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A"
+    const date = new Date(dateString)
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`
+  }
+
+  if (loading) {
+    return (
+      <div className='max-w-7xl mx-auto p-4 sm:p-6'>
+        <h2 className='text-xl sm:text-2xl font-bold mb-6'>My Orders</h2>
+        <div className='text-center py-8'>
+          <p className='text-gray-500'>Loading orders...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -47,6 +50,11 @@ const MyOrder = () => {
       <h2 className='text-xl sm:text-2xl font-bold mb-6'>
         My Orders
       </h2>
+      {error && (
+        <div className='mb-4 p-4 bg-red-100 text-red-700 rounded'>
+          {error?.message || error}
+        </div>
+      )}
       <div className='relative shadow-md sm:rounded-lg overflow-hidden'>
         <table className='min-w-full text-left text-gray-500'>
           <thead className='bg-gray-100 text-xs uppercase text-gray-700'>
@@ -60,27 +68,58 @@ const MyOrder = () => {
             </tr>
           </thead>
           <tbody>
-            {orders.length > 0 ? (
+            {orders && orders.length > 0 ? (
               orders.map((order) => (
-                <tr key={order._id} 
-                  onClick={()=> handleOrderClick(order._id)}
-                className='border-b hover:border-gray-500 cursor-pointer'>
-                  <td className='py-2 px-2 sm:py-4 sm:px-4 '>
-                    <img src={order.orderItems[0].image} alt={order.orderItems[0].name} className='w-10 h-10 sm:h-12 object-cover rounded-lg'/>
+                <tr 
+                  key={order._id} 
+                  onClick={() => handleOrderClick(order._id)}
+                  className='border-b hover:bg-gray-50 cursor-pointer transition-colors'
+                >
+                  <td className='py-2 px-2 sm:py-4 sm:px-4'>
+                    {order.orderItems && order.orderItems.length > 0 ? (
+                      <img 
+                        src={order.orderItems[0].image || '/placeholder-image.jpg'} 
+                        alt={order.orderItems[0].name || 'Product'} 
+                        className='w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-lg'
+                      />
+                    ) : (
+                      <div className='w-10 h-10 sm:w-12 sm:h-12 bg-gray-200 rounded-lg flex items-center justify-center'>
+                        <span className='text-xs text-gray-400'>No Image</span>
+                      </div>
+                    )}
                   </td>
-                  <td className='py-2 px-4 text-gray-900 sm:py-4'>{order._id}</td>
-                  <td className='py-2 px-4 text-gray-900 sm:py-4'>{order.createdAt.toLocaleDateString()}
-                    {" "}{order.createdAt.toLocaleTimeString()}
+                  <td className='py-2 px-4 text-gray-900 sm:py-4'>
+                    #{order._id?.slice(-8) || order._id}
                   </td>
-                  <td className='py-2 px-4 text-gray-900 sm:py-4'>{order.shippingAddress.city? `${order.shippingAddress.city},${order.shippingAddress.country}` : "N/A"}</td>
-                  <td className='py-2 px-4 text-gray-900 sm:py-4'>${order.totalPrice}</td>
+                  <td className='py-2 px-4 text-gray-900 sm:py-4'>
+                    {formatDate(order.createdAt)}
+                  </td>
+                  <td className='py-2 px-4 text-gray-900 sm:py-4'>
+                    {order.shippingAddress?.city && order.shippingAddress?.country
+                      ? `${order.shippingAddress.city}, ${order.shippingAddress.country}`
+                      : "N/A"}
+                  </td>
+                  <td className='py-2 px-4 text-gray-900 sm:py-4'>
+                    ₹{order.totalPrice?.toLocaleString() || 0}
+                  </td>
                   <td className='py-2 px-4 text-gray-900 sm:py-4 sm:text-sm'>
-                    <span className={`${order.isPaid ? 'bg-green-500' : 'bg-red-500'} text-white px-2 py-1 rounded`}>{order.isPaid ? 'Paid' : 'Pending'}</span></td>
+                    <span 
+                      className={`${
+                        order.isPaid || order.paymentStatus === 'paid' 
+                          ? 'bg-green-500' 
+                          : 'bg-red-500'
+                      } text-white px-2 py-1 rounded text-xs`}
+                    >
+                      {order.isPaid || order.paymentStatus === 'paid' ? 'Paid' : 'Pending'}
+                    </span>
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={7} className="text-center py-4 px-4 text-gray-500">No orders found</td>
+                <td colSpan={6} className="text-center py-8 px-4 text-gray-500">
+                  No orders found
+                </td>
               </tr>
             )}
           </tbody>

@@ -1,12 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { useState } from 'react'
 import Paypal from './Paypal'
 import { useCart } from '../../context/CartContext'
+import { useDispatch, useSelector } from 'react-redux'
+import axios from 'axios'
+import { createCheckout } from '../../redux/slices/checkoutSlice'
 
 const Checkout = () => {
 
   const navigate=useNavigate()
+  const dispatch=useDispatch()
+  const {cart,loading,error}=useSelector((state)=>state.cart)
+  const {user}=useSelector((state)=>state.auth)
   const [checkoutId,setCheckoutId]=useState(null)
   const { cartItems, subtotal, clearCart } = useCart()
   const totalAmount = subtotal
@@ -20,19 +26,81 @@ const Checkout = () => {
     phone:"",
   })
 
+  useEffect(()=>{
+    if(!cart || !cart.products || cart.products.length===0){
+      navigate("/")
+    }
+  },[cart,navigate])
+
 const handleCreateCheckout=async(e)=>{
   e.preventDefault()
-  if(cartItems.length===0){
-    return
+  if(cart && cart.products.length>0){
+    const res=dispatch(createCheckout({
+      checkoutData:{
+        checkoutItems:cart.products,
+        shippingAddress,
+        paymentMethod:"PayPal",
+        totalPrice:cart.totalPrice,
+      }
+    }))
+    if(res.payload && res.payload._id){
+      setCheckoutId(res.payload._id)
+    }
   }
-  setCheckoutId(123)
 }
 
-const handlePaymentSuccess=(details)=>{
-  console.log("Payment Successful",details)
-  clearCart()
-  navigate("/order-confirmation")
+const handlePaymentSuccess= async (details)=>{
+  try {
+    const token=localStorage.getItem("userToken")
+    if(!token){
+      throw new Error("Missing auth token")
+    }
+
+    const response=await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/checkout/pay`,
+      {paymentStatus:"paid",paymentDetails:details},
+      {
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      })
+      if(response.status===200){
+        await handleFinalizeCheckout(checkoutId,token)
+      }else{
+        console.error(error)
+      }
+  } catch (error) {
+    console.error(error)
+  }
 }
+
+const handleFinalizeCheckout=async(checkoutId,token)=>{
+  try {
+    const authToken=token || localStorage.getItem("userToken")
+    if(!authToken){
+      throw new Error("Missing auth token")
+    }
+
+    const response=await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/finalize`,
+      {},
+      {
+        headers:{
+          Authorization: `Bearer ${authToken}`
+        }
+      }
+    )
+    if(response.status===201){
+        navigate("/order-confirmation")
+      }else{
+        console.error(error)
+      }
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+  if(loading) return <p>Loading...</p>;
+  if(error) return <p>Error: {error}</p>;
+  if(!cart || !cart.products || cart.products.length===0) return <p>Cart is empty</p>;
 
 const handlePaymentError=(error)=>{
   console.log("Payment Failed",error)
@@ -48,7 +116,7 @@ const handlePaymentError=(error)=>{
           <div className='mb-4'>
             <label className='block text-gray-700'>Email</label>
             <input type='email' 
-            value="user@example.com" 
+            value={user? user.email : ""} 
             className='w-full p-2 border rounded'
             disabled/>
           </div>

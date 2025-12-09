@@ -29,28 +29,7 @@ router.post("/", protect, admin, async (req, res) => {
       sku,
     } = req.body;
 
-    const product = new Product({
-      name,
-      description,
-      discountPrice,
-      price,
-      stock,
-      category,
-      brand,
-      sizes,
-      colors,
-      collections,
-      material,
-      gender,
-      images,
-      isFeatured,
-      isPublished,
-      tags,
-      dimensions,
-      weight,
-      sku,
-      user: req.user._id,
-    });
+    
 
     const createdProduct = await product.save();
     res.status(201).json(createdProduct);
@@ -74,7 +53,7 @@ router.put("/:id", protect, admin, async (req, res) => {
       sizes,
       colors,
       collections,
-      material,
+      material:materials,
       gender,
       images,
       isFeatured,
@@ -139,12 +118,18 @@ router.delete("/:id", protect, admin, async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    const { collection, size, color, gender, minPrice, maxPrice, sortBy, search, category, material, brand, limit } = req.query
+    const { collection, size, color, gender, minPrice, maxPrice, sortBy, search, category, material, brand, rating, limit } = req.query
 
-    let query = {}
+    const query = {}
+    const andClauses = []
 
     if (collection && collection.toLocaleLowerCase() !== "all") {
-      query.collection = collection;
+      andClauses.push({
+        $or: [
+          { collections: collection },
+          { collection: collection }
+        ]
+      })
     }
 
     if (category && category.toLocaleLowerCase() != "all") {
@@ -157,10 +142,22 @@ router.get("/", async (req, res) => {
       query.brand = { $in: brand.split(",") }
     }
     if (color) {
-      query.color = { $in: [color] }
+      const colors = color.split(",")
+      andClauses.push({
+        $or: [
+          { colors: { $in: colors } },
+          { color: { $in: colors } },
+        ]
+      })
     }
     if (size) {
-      query.size = { $in: size.split(",") }
+      const sizes = size.split(",")
+      andClauses.push({
+        $or: [
+          { sizes: { $in: sizes } },
+          { size: { $in: sizes } },
+        ]
+      })
     }
     if (gender) {
       query.gender = gender
@@ -170,11 +167,18 @@ router.get("/", async (req, res) => {
       if (minPrice) query.price.$gte = Number(minPrice)
       if (maxPrice) query.price.$lte = Number(maxPrice)
     }
+    if (rating) {
+      query.rating = { $gte: Number(rating) }
+    }
     if (search) {
       query.$or = [
         { name: { $regex: search, $options: "i" } },
         { description: { $regex: search, $options: "i" } }
       ]
+    }
+
+    if (andClauses.length) {
+      query.$and = andClauses
     }
 
     let sort = {}
@@ -186,8 +190,11 @@ router.get("/", async (req, res) => {
         case "priceDesc":
           sort = { price: -1 }
           break
+        case "ratingDesc":
+          sort = { rating: -1 }
+          break
         case "popularity":
-          sort: { rating: -1 }
+          sort = { rating: -1 }
           break
         default:
           break
@@ -206,15 +213,12 @@ router.get("/", async (req, res) => {
 
 router.get('/best-seller', async (req, res) => {
   try {
-    // First try to find published products with rating
     let bestSeller = await Product.findOne({ isPublished: true }).sort({ rating: -1, createdAt: -1 })
     
-    // If no published products, try any product with rating
     if (!bestSeller) {
       bestSeller = await Product.findOne().sort({ rating: -1, createdAt: -1 })
     }
     
-    // If still no product, try any product
     if (!bestSeller) {
       bestSeller = await Product.findOne().sort({ createdAt: -1 })
     }
@@ -246,12 +250,10 @@ router.get('/similar/:id', async (req, res) => {
   const { id } = req.params;
   const { limit } = req.query;
   
-  // Check if id exists and is not undefined/null/empty
   if (!id || id === 'undefined' || id === 'null') {
     return res.status(400).json({ message: "Product ID is required" });
   }
   
-  // Validate ObjectId format
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ message: "Invalid product ID format" });
   }
@@ -280,12 +282,10 @@ router.get('/similar/:id', async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   
-  // Check if id exists and is not undefined/null/empty
   if (!id || id === 'undefined' || id === 'null') {
     return res.status(400).json({ message: "Product ID is required" });
   }
   
-  // Validate ObjectId format
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ message: "Invalid product ID format" });
   }

@@ -4,14 +4,21 @@ import { HiMinus } from "react-icons/hi2";
 import { HiPlus } from "react-icons/hi2";
 import { useNavigate } from "react-router";
 import { useCart } from "../../context/CartContext";
+import { useSelector } from "react-redux";
 
 const CartScroller = ({ isOpen, toggleCart }) => {
   const { cartItems, updateQuantity, removeItem, subtotal, totalItems } = useCart();
   const navigate=useNavigate();
+  const {user,guestId}=useSelector((state)=>state.auth)
+  const userId=user?user._id:null
   const handleCheckout=()=>{
     if (cartItems.length === 0) return;
     toggleCart();
-    navigate("/checkout");
+    if (!user){
+      navigate("/login?redirect=checkout");
+    }else{
+      navigate("/checkout");
+    }
   }
 
   return (
