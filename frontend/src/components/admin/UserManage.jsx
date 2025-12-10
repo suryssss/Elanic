@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import {
   addUser,
-  updatedUser,
-  deletedUser,
+  updateUser,
+  deleteUser,
   fetchUsers,
 } from "../../redux/slices/adminSlice";
 
@@ -30,7 +30,7 @@ const UserManage = () => {
   }, [user, navigate]);
 
   useEffect(()=>{
-    if(user & user.role==="admin"){
+    if(user && user.role==="admin"){
         dispatch(fetchUsers())
     }
   },[dispatch,user])
@@ -53,12 +53,12 @@ const UserManage = () => {
   };
 
   const handleRoleChange = (userId, newRole) => {
-    dispatch(updatedUser({ id: userId, role: newRole }));
+    dispatch(updateUser({ id: userId, role: newRole }));
   };
 
   const handleDelete = (userId) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
-      dispatch(deletedUser(userId));
+      dispatch(deleteUser(userId));
     }
   };
 

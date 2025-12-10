@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { fetchAllOrders, updatedOrderStatus } from "../../redux/slices/adminOrderSlice";
+import { fetchAllOrders, updateOrderStatus } from "../../redux/slices/adminOrderSlice";
 
 const OrderManagement = () => {
   const dispatch = useDispatch();
@@ -9,8 +9,8 @@ const OrderManagement = () => {
 
   const { user } = useSelector((state) => state.auth);
 
-  // FIXED: correct variable name "orders"
-  const { orders, loading, error } = useSelector((state) => state.admin);
+  // FIXED: correct variable name "orders" and state slice
+  const { orders, loading, error } = useSelector((state) => state.adminOrders);
 
   useEffect(() => {
     if (!user || user.role !== "admin") {
@@ -21,7 +21,7 @@ const OrderManagement = () => {
   }, [dispatch, user, navigate]);
 
   const handleStatusChange = (orderId, status) => {
-    dispatch(updatedOrderStatus({ id: orderId, status }));
+    dispatch(updateOrderStatus({ id: orderId, status }));
   };
 
   if (loading) return <p>Loading...</p>;

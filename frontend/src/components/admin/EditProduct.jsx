@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 import {
   fetchProductDetails,
-  updatedProduct,
+  updateProducts,
 } from "../../redux/slices/productSlice";
 
 const EditProduct = () => {
@@ -12,7 +12,7 @@ const EditProduct = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { selectedProduct, loading, error } = useSelector(
+  const { selectedProducts, loading, error } = useSelector(
     (state) => state.products
   );
 
@@ -39,10 +39,10 @@ const EditProduct = () => {
 
   // Fill form when product loaded
   useEffect(() => {
-    if (selectedProduct) {
-      setProductData(selectedProduct);
+    if (selectedProducts) {
+      setProductData(selectedProducts);
     }
-  }, [selectedProduct]);
+  }, [selectedProducts]);
 
   // Handle text inputs
   const handleChange = (e) => {
@@ -82,7 +82,7 @@ const EditProduct = () => {
   // Submit update
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(updatedProduct({ id, productData }));
+    dispatch(updateProducts({ id, productData }));
     navigate("/admin/products");
   };
 
