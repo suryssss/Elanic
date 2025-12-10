@@ -17,11 +17,11 @@ const Checkout = () => {
   const { cartItems, subtotal, clearCart } = useCart()
   const totalAmount = subtotal
   const [shippingAddress,setShippingAddress]=useState({
-    firstname:"",
-    lastname:"",
+    firstName:"",
+    lastName:"",
     address:"",
     city:"",
-    postalcode:"",
+    postalCode:"",
     country:"",
     phone:"",
   })
@@ -35,16 +35,21 @@ const Checkout = () => {
 const handleCreateCheckout=async(e)=>{
   e.preventDefault()
   if(cart && cart.products.length>0){
-    const res=dispatch(createCheckout({
-      checkoutData:{
-        checkoutItems:cart.products,
-        shippingAddress,
-        paymentMethod:"PayPal",
-        totalPrice:cart.totalPrice,
+    try{
+      const totalPrice=cart.totalPrice ?? totalAmount
+      const res=await dispatch(createCheckout({
+        checkoutData:{
+          checkoutItems:cart.products,
+          shippingAddress,
+          paymentMethod:"PayPal",
+          totalPrice,
+        }
+      })).unwrap()
+      if(res && res._id){
+        setCheckoutId(res._id)
       }
-    }))
-    if(res.payload && res.payload._id){
-      setCheckoutId(res.payload._id)
+    }catch(err){
+      console.error("Failed to start checkout",err)
     }
   }
 }
@@ -56,7 +61,7 @@ const handlePaymentSuccess= async (details)=>{
       throw new Error("Missing auth token")
     }
 
-    const response=await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/checkout/pay`,
+    const response=await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/pay`,
       {paymentStatus:"paid",paymentDetails:details},
       {
         headers:{
@@ -126,10 +131,10 @@ const handlePaymentError=(error)=>{
               <label className='block text-gray-700'>First Name</label>
               <input
                 type='text'
-                value={shippingAddress.firstname}
+              value={shippingAddress.firstName}
                 onChange={(e)=>setShippingAddress({
                   ...shippingAddress,
-                  firstname:e.target.value,
+                firstName:e.target.value,
                 })
               }
               className='w-full p-2 border rounded'
@@ -140,10 +145,10 @@ const handlePaymentError=(error)=>{
               <label className='block text-gray-700'>Last Name</label>
               <input
                 type='text'
-                value={shippingAddress.lastname}
+              value={shippingAddress.lastName}
                 onChange={(e)=>setShippingAddress({
                   ...shippingAddress,
-                  lastname:e.target.value,
+                lastName:e.target.value,
                 })
               }
               className='w-full p-2 border rounded'
@@ -182,10 +187,10 @@ const handlePaymentError=(error)=>{
               <label className='block text-gray-700'>Postal Code</label>
               <input
                 type='text'
-                value={shippingAddress.postalcode}
+            value={shippingAddress.postalCode}
                 onChange={(e)=>setShippingAddress({
                   ...shippingAddress,
-                  postalcode:e.target.value,
+              postalCode:e.target.value,
                 })
               }
               className='w-full p-2 border rounded'

@@ -123,13 +123,20 @@ router.delete('/',async(req,res)=>{
 router.get('/',async(req,res)=>{
     const {userId,guestId}=req.query
     try {
-        const cart=await getCart(userId,guestId)
-        if (cart){
-            res.json(cart)
+        let cart=await getCart(userId,guestId)
+
+        // Always provide a cart: create an empty one if missing
+        if (!cart){
+            const resolvedGuestId = guestId || (userId ? undefined : "guest_" + Date.now())
+            cart = await Cart.create({
+                user: userId || undefined,
+                guestId: userId ? undefined : resolvedGuestId,
+                products: [],
+                totalPrice: 0,
+            })
         }
-        else{
-            res.status(404).json({message:"Cart not found"})
-        }
+
+        res.json(cart)
     } catch (error) {
         console.log(error)
         return res.status(500).send("Server Error")
@@ -137,54 +144,65 @@ router.get('/',async(req,res)=>{
 })
 
 router.post('/merge',protect,async(req,res)=>{
-    const {guestId}=req.body
+    await handleMerge(req,res,req.body?.guestId)
+})
+
+// Convenience GET endpoint for merge using query param (auth still required)
+router.get('/merge',protect,async(req,res)=>{
+    await handleMerge(req,res,req.query?.guestId)
+})
+
+module.exports=router
+
+// helper to reuse merge logic
+async function handleMerge(req,res,guestIdParam){
+    const guestId = guestIdParam || req.body?.guestId || req.query?.guestId
     try {
-        const guestCart=await Cart.findOne({guestId})
-        const userCart=await Cart.findOne({user:req.user._id})
+        const guestCart = guestId ? await Cart.findOne({guestId}) : null
+        const userCart = await Cart.findOne({user:req.user._id})
 
-        if (guestCart){
-            if (guestCart.products.length===0){
-                return res.status(400).json({message:"Guest cart is empty"})
-
-            }
+        // If no guest cart or it's empty, just return the user cart (or create an empty one)
+        if (!guestCart || guestCart.products.length===0){
             if (userCart){
-                guestCart.products.forEach((guestItem)=>{
-                    const productIdx=userCart.products.findIndex((item)=>
+                return res.status(200).json(userCart)
+            }
+            const emptyCart = await Cart.create({
+                user: req.user._id,
+                products: [],
+                totalPrice: 0,
+            })
+            return res.status(200).json(emptyCart)
+        }
+
+        if (userCart){
+            guestCart.products.forEach((guestItem)=>{
+                const productIdx=userCart.products.findIndex((item)=>
                     item.productId.toString()===guestItem.productId.toString() && 
                     item.size===guestItem.size && 
                     item.color===guestItem.color)
-                    if (productIdx>-1){
-                        userCart.products[productIdx].quantity+=guestItem.quantity
-                    }else{
-                        userCart.products.push(guestItem)
-                    }
-                })
-                userCart.totalPrice=userCart.products.reduce((acc,item)=>acc+item.price*item.quantity,0)
-                await userCart.save()
-
-                try {
-                    await Cart.findOneAndDelete({guestId})
-                } catch (error) {
-                    console.error("Error deleting guest cart",error)
+                if (productIdx>-1){
+                    userCart.products[productIdx].quantity+=guestItem.quantity
+                }else{
+                    userCart.products.push(guestItem)
                 }
-                res.status(200).json(userCart)
-            }else{
-                guestCart.user=req.user._id
-                guestCart.guestId=undefined
-                await guestCart.save()
-                res.status(200).json(guestCart)
-            }
-        }else{
-            if (userCart){
-                return res.status(400).json(userCart)
-            }
-            return res.status(404).json({message:"Guest cart not found"})
-        }
+            })
+            userCart.totalPrice=userCart.products.reduce((acc,item)=>acc+item.price*item.quantity,0)
+            await userCart.save()
 
+            try {
+                if (guestId) await Cart.findOneAndDelete({guestId})
+            } catch (error) {
+                console.error("Error deleting guest cart",error)
+            }
+            return res.status(200).json(userCart)
+        }else{
+            guestCart.user=req.user._id
+            guestCart.guestId=undefined
+            await guestCart.save()
+            return res.status(200).json(guestCart)
+        }
     } catch (error) {
         console.error("Error merging carts",error)
         return res.status(500).send("Server Error")
     }
-})
-
-module.exports=router
+}

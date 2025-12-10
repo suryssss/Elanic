@@ -2,7 +2,9 @@ import {createSlice,createAsyncThunk} from "@reduxjs/toolkit"
 import axios from "axios"
 
 
-const userFromStorage=localStorage.getItem("user")?JSON.parse(localStorage.getItem("user")):null
+// Keep stored user consistent: use "user" key
+const storedUser=localStorage.getItem("user") || localStorage.getItem("userInfo")
+const userFromStorage=storedUser ? JSON.parse(storedUser) : null
 
 const initalGuestId=localStorage.getItem("guestId") ||`guest_${new Date().getTime()}`;
 localStorage.setItem("guestId",initalGuestId);
@@ -18,9 +20,11 @@ export const loginUser=createAsyncThunk("auth/login",async({email,password},{rej
     try {
         const userData={email,password}
         const response=await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/user/login`,userData)
-        localStorage.setItem("userInfo",JSON.stringify(response.data.user));
+        const user=response.data.user
+        localStorage.setItem("user",JSON.stringify(user));
         localStorage.setItem("userToken",response.data.token);
-        return response.data.user
+        localStorage.removeItem("userInfo")
+        return user
     } catch (error) {
         return rejectWithValue(error.response.data.message)
     }
@@ -36,10 +40,12 @@ export const registerUser = createAsyncThunk(
         { name,email, password }
       );
 
-      localStorage.setItem("userInfo", JSON.stringify(response.data.user));
+      const user=response.data.user;
+      localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("userToken", response.data.token);
+      localStorage.removeItem("userInfo");
 
-      return response.data.user;
+      return user;
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Registration failed"
@@ -58,6 +64,7 @@ const authSlice=createSlice({
             state.user=null;
             state.guestId=`guest_${new Date().getTime()}`;
             localStorage.removeItem("userInfo");
+            localStorage.removeItem("user");
             localStorage.removeItem("userToken");
             localStorage.setItem("guestId",state.guestId)
         },

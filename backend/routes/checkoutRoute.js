@@ -19,7 +19,7 @@ router.post('/',protect,async(req,res)=>{
             shippingAddress,
             paymentMethod,
             totalPrice,
-            paymentStatus:"Pending",
+            paymentStatus:"pending",
             isPaid:false,
         })
         console.log(`Checkout created for user: ${req.user._id}`)
@@ -70,7 +70,7 @@ router.post("/:id/finalize",protect,async(req,res)=>{
                 paidAt:checkout.paidAt,
                 isDelivered:false,
                 paymentStatus:"paid",
-                paymentDetails:checkout.checkoutDetails,
+                paymentDetails:checkout.paymentDetails,
 
             })
 

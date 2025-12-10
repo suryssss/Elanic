@@ -35,10 +35,13 @@ const orderSchema=new mongoose.Schema({
     },
     orderItems:[orderItemSchema],
     shippingAddress:{
+        firstName:{type:String},
+        lastName:{type:String},
         address:{type:String,required:true},
         city:{type:String,required:true},
         postalCode:{type:String,required:true},
         country:{type:String,required:true},
+        phone:{type:String},
     },
     paymentMethod:{
         type:String,
@@ -65,6 +68,9 @@ const orderSchema=new mongoose.Schema({
     paymentStatus:{
         type:String,
         default:"pending",
+    },
+    paymentDetails:{
+        type:mongoose.Schema.Types.Mixed,
     },
     status:{
         type:String,
