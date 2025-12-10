@@ -1,42 +1,41 @@
-import React from 'react'
-import { Link } from 'react-router'
-import featured from './../assets/featured.webp'
+import React from "react";
+import featured from "./../assets/banner.png";
 
 const FeaturedProducts = () => {
   return (
-    <section className='py-16 px-4 lg:px-0'>
-      <div className='container mx-auto flex flex-col-reverse lg:flex-row items-center bg-green-50 rounded-lg overflow-hidden'>
-        
-        {/* Text Section */}
-        <div className='lg:w-1/2 p-8 text-center lg:text-left'>
-          <h2 className='text-lg font-semibold text-gray-700 mb-2'>Comfort and Style</h2>
-          <h2 className='text-4xl lg:text-5xl font-bold mb-6'>
-            Apparel made for your everyday life
+    <section className="w-full mt-30">
+
+      {/* Top Banner Section */}
+      <div className="relative w-full h-[60vh] lg:h-[70vh] overflow-hidden">
+        {/* Background Image */}
+        <img
+          src={featured}
+          alt="Featured"
+          className="w-full h-full object-cover"
+        />
+
+        {/* Text Overlay */}
+        <div className="absolute right-10 top-1/2 -translate-y-1/2 text-white text-center lg:text-left">
+          <h2 className="text-4xl lg:text-5xl font-light tracking-wide mb-6">
+            New Season<br />Offers
           </h2>
-          <p className='text-lg text-gray-600 mb-6'>
-            Discover high-quality, comfortable clothing that effortlessly blends 
-            fashion and function. Designed to make you look and feel great every day.
-          </p>
-          <Link 
-            to="/collections/all" 
-            className='bg-black text-white px-6 py-2 rounded-lg text-lg hover:bg-gray-800 transition-all'
-          >
-            Shop Now
-          </Link>
-        </div>
 
-        {/* Image Section */}
-        <div className='lg:w-1/2'>
-          <img 
-            src={featured} 
-            alt='Featured Collection' 
-            className='w-full h-full object-cover rounded-t-lg lg:rounded-tr-3xl lg:rounded-br-3xl lg:rounded-tl-none'
-          />
+          <button className="bg-white text-black px-8 py-3 text-lg shadow-md hover:bg-gray-100 transition-all">
+            Shop now
+          </button>
         </div>
-
       </div>
-    </section>
-  )
-}
 
-export default FeaturedProducts
+      {/* Bottom Description Section */}
+      <div className="py-10 px-4 lg:px-0 bg-white text-center max-w-3xl mx-auto">
+        <p className="text-lg text-gray-700 leading-relaxed">
+          Discover high-quality, comfortable clothing that effortlessly blends
+          fashion and function. Designed to make you look and feel great every day.
+        </p>
+      </div>
+
+    </section>
+  );
+};
+
+export default FeaturedProducts;

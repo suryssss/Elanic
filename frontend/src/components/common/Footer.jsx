@@ -1,76 +1,119 @@
-import React from 'react'
-import { FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa'
-import {  FaXTwitter } from 'react-icons/fa6'
-import { Link } from 'react-router'
+// WaveFooter.jsx
+import React from "react";
+// Import icons from lucide-react, renamed X to XIcon for clarity
+import { Facebook, Instagram, X as XIcon } from "lucide-react";
 
-const Footer = () => {
+const WaveFooter = () => {
   return (
-    <footer className='border-t py-12 px-10'>
-      <div className='container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-4 lg:px-0'>
-        <div>
-          <h3 className='text-lg text-gray-900 mb-4'>NewsLetter</h3>
-          <p className=' text-gray-500 mb-4'>Be the first to hear about new arrivals, exclusive offers, and special events.</p>
-          <p className='font-medium text-sm text-gray-600 mb-6'>Sign up and get 10% off your first order!</p>
-          <form className='flex'>
-              <input type='email' placeholder='Enter your email' className='p-3 w-full text-sm border-t border-l border-b border-gray-300 rounded-l-md focus:outline-none
-              focus:ring-2 focus:ring-gray-500 transition-all'required/>
-              <button type='submit' className='bg-black text-amber-50 px-6 rounded-r-md hover:bg-gray-800 transition-all w-40'>Subscribe</button>
-          </form>
-        </div>
-        <div>
-          <h3 className='text-lg text-gray-800 mb-4 '>Shop</h3>
-          <ul className='space-y-2 text-gray-700'>
-              <li>
-                <Link to="#" className='hover:text-black transition-colors'>Men's Clothing</Link>
-              </li>
-              <li>
-                <Link to="#" className='hover:text-black transition-colors'>Women's Clothing</Link>
-              </li>
-              <li>
-                <Link to="#" className='hover:text-black transition-colors'>Kid's Clothing</Link>
-              </li>
-              <li>
-                <Link to="#" className='hover:text-black transition-colors'>Accessories</Link>
-              </li>
-          </ul>
-        </div>
-        <div>
-          <h3 className='text-lg text-gray-800 mb-4 '>Shop</h3>
-          <ul className='space-y-2 text-gray-700'>
-              <li>
-                <Link to="#" className='hover:text-black transition-colors'>Support</Link>
-              </li>
-              <li>
-                <Link to="#" className='hover:text-black transition-colors'>About Us</Link>
-              </li>
-              <li>
-                <Link to="#" className='hover:text-black transition-colors'>Blogs</Link>
-              </li>
-              <li>
-                <Link to="#" className='hover:text-black transition-colors'>Contact Us</Link>
-              </li>
-          </ul>
-        </div>
-        <div>
-          <h3 className='text-lg text-gray-800 mb-2'>Follow Us</h3>
-          <div className='flex items-center space-x-4 mb-4'>
-            <a href="#"><FaFacebookF className="h-5 w-5 hover:text-gray-600 transition-colors" /></a>
-            <a href="#"><FaXTwitter className="h-5 w-5 hover:text-gray-600 transition-colors" /></a>
-            <a href="#"><FaInstagram className="h-5 w-5 hover:text-gray-600 transition-colors" /></a>
+    <footer className="relative bg-black text-white">
+      {/* Wave SVG: This creates the curve effect between the page content (above, assumed white) 
+        and the black footer content (below).
+      */}
+      <div className="w-full overflow-hidden leading-[0] bg-white">
+  <svg
+    viewBox="0 0 1440 180"
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-full h-[180px] block"
+    preserveAspectRatio="none"
+  >
+    <path
+      d="
+        M0,60 
+        C200,40 380,30 540,55 
+        C720,85 960,95 1200,70 
+        C1320,58 1440,60 1440,60 
+        L1440,180 
+        L0,180 
+        Z
+      "
+      fill="#000"
+    />
+  </svg>
+</div>
+
+      <div className="relative z-10 container mx-auto px-6 lg:px-16 pt-0 pb-14"> 
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 items-start">
+          <div className="lg:col-span-2">
+            <h3 className="text-3xl font-serif mb-4">NewsLetter</h3>
+            <p className="text-gray-300 text-sm mb-4 leading-relaxed max-w-sm">
+              Be the first to hear about new arrivals, exclusive offers,<br/> and special events.<br/>
+              Sign up and get 10% off your first order!
+            </p>
+
+            <form className="flex max-w-xs h-10"> 
+              <label htmlFor="email" className="sr-only">Email</label>
+              <input
+                id="email"
+                type="email"
+                placeholder="Enter email"
+                className="flex-1 px-3 bg-white text-black placeholder-gray-500 outline-none focus:ring-1 focus:ring-gray-300"
+              />
+              <button
+                type="submit"
+                className="bg-black text-white px-4 py-2 font-medium border border-white hover:bg-gray-800 transition"
+                aria-label="Subscribe"
+              >
+                subscribe
+              </button>
+            </form>
           </div>
-          <h3 className='text-lg text-gray-800 '>Contact Us</h3>
-          <p className='text-gray-700 mb-2'>Phone: (123) 456-7890</p>
-          <p className='text-gray-700 mb-2'>Email: info@elanic.com</p>
+          
+          {/* Shop Links (1 column) */}
+          <div className="text-sm text-gray-100 mt-2">
+            <h4 className="font-medium mb-3 uppercase tracking-wider">Shop</h4>
+            <ul className="space-y-2">
+              <li><a href="#" className="hover:text-white transition">Men's clothing</a></li>
+              <li><a href="#" className="hover:text-white transition">Women's clothing</a></li>
+              <li><a href="#" className="hover:text-white transition">Kids clothing</a></li>
+              <li><a href="#" className="hover:text-white transition">Accessories</a></li>
+            </ul>
+          </div>
+
+          {/* Info Links */}
+          <div className="text-sm text-gray-100 mt-2">
+            <h4 className="font-medium mb-3 uppercase tracking-wider">Support</h4>
+            <ul className="space-y-2">
+              <li><a href="#" className="hover:text-white transition">Support Center</a></li>
+              <li><a href="#" className="hover:text-white transition">About Us</a></li>
+              <li><a href="#" className="hover:text-white transition">Blog</a></li>
+              <li><a href="#" className="hover:text-white transition">Contact Us</a></li>
+            </ul>
+          </div>
+
+          {/* Contact + Social  */}
+          <div className="text-sm text-gray-100 mt-2">
+            <h4 className="font-medium mb-3 uppercase tracking-wider">Follow Us</h4>
+
+            {/* Social Icons */}
+            <div className="flex items-center space-x-4 mb-6">
+              <a href="#" aria-label="Facebook" className="hover:text-gray-300 transition">
+                <Facebook size={20} />
+              </a>
+              <a href="#" aria-label="Instagram" className="hover:text-gray-300 transition">
+                <Instagram size={20} />
+              </a>
+              <a href="#" aria-label="X (Twitter)" className="hover:text-gray-300 transition">
+                <XIcon size={20} />
+              </a>
+            </div>
+
+            {/* Contact Details */}
+            <div className="space-y-1">
+              <h4 className="font-medium mb-2 uppercase tracking-wider">Contact Us</h4>
+              <div>Phone: (+91) 987-456-7890</div>
+              <a href="mailto:info@elanix.com" className="hover:underline transition">Email: info@elanic.com</a>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-14 text-center">
+          <h1 className="text-[7rem] sm:text-[9rem] md:text-[11rem] leading-none font-sans italic  tracking-widest font-extrabold select-none">
+            ELANIC
+          </h1>
         </div>
       </div>
-      <div className='container mx-auto mt-12 px-4 lg:px-0 border-t border-gray-200 pt-6'>
-          <p className='text-gray-500 text-sm tracking-tighter text-center'>
-            @2025, Elanic. All rights reserved.
-          </p>
-        </div>
-
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default WaveFooter;

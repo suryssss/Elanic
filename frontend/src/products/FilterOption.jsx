@@ -188,7 +188,7 @@ const FilterOption = () => {
           type="range"
           name="price"
           min={0}
-          max={5000}
+          max={500}
           onChange={handlePriceChange}
           value={priceRange[1]}
           className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
