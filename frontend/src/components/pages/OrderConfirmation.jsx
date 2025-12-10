@@ -1,39 +1,33 @@
-import React from 'react'
-
-const checkout={
-  _id:"12323",
-  createdAt:new Date(),
-  checkoutItems:[
-    {
-      productID:"1",
-      name:"jacket",
-      color:"blue",
-      size:"M",
-      price:200,
-      quantity:2,
-      images:"https://picsum.photos/500/500?random=4",
-    },
-        {
-      productID:"2",
-      name:"shirt",
-      color:"black",
-      size:"S",
-      price:100,
-      quantity:1,
-      images:"https://picsum.photos/500/500?random=5",
-    },
-  ],
-  shippingAddress:{
-    address:"123 Main St",
-    city:"New York",
-    country:"USA",
-  },
-}
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router'
+import { clearCart } from '../../redux/slices/cartSlice'
 
 const OrderConfirmation = () => {
+  const dispatch=useDispatch()
+  const navigate=useNavigate()
+  const {checkout}=useSelector((state)=>state.checkout)
+
+  useEffect(()=>{
+    if(checkout && checkout._id){
+      dispatch(clearCart())
+      localStorage.removeItem("cart")
+    }else{
+      navigate("/my-order")
+    }
+  },[checkout,dispatch,navigate])
+
+  const formatDate = (dateValue) => {
+    if (!dateValue) return 'N/A'
+    const date = typeof dateValue === 'string' ? new Date(dateValue) : dateValue
+    if (isNaN(date.getTime())) return 'N/A'
+    return date.toLocaleDateString()
+  }
 
   const CalculateEstimatedDelivary=(createdAt)=>{
-    const orderDate=new Date(createdAt)
+    if (!createdAt) return 'N/A'
+    const orderDate = typeof createdAt === 'string' ? new Date(createdAt) : createdAt
+    if (isNaN(orderDate.getTime())) return 'N/A'
     orderDate.setDate(orderDate.getDate()+7)
     return orderDate.toLocaleDateString()
   }
@@ -51,7 +45,7 @@ const OrderConfirmation = () => {
                 Order ID: {checkout._id}
               </h2>
               <p className='text-gray-500'>
-                Order Date: {checkout.createdAt.toLocaleDateString()}
+                Order Date: {formatDate(checkout.createdAt)}
               </p>
             </div>
             <div>
@@ -62,16 +56,16 @@ const OrderConfirmation = () => {
           </div>
 
             <div className='mb-20'>
-                {checkout.checkoutItems.map((items)=>(
-                  <div key={items.productID} className='flex items-center mb-4'>
-                      <img src={items.images} alt={items.name} className='w-16 h-16 object-cover
+                {(checkout.checkoutItems || checkout.orderItems || []).map((items, index)=>(
+                  <div key={items.productId || items.productID || index} className='flex items-center mb-4'>
+                      <img src={items.image || items.images} alt={items.name} className='w-16 h-16 object-cover
                       rounded-md mr-4'/>
                       <div>
                           <h4 className='text-md font-semibold'>{items.name}</h4>
-                          <p className='text-gray-500 text-sm'>{items.color} | {items.size}</p>
+                          <p className='text-gray-500 text-sm'>{items.color || ''} | {items.size || ''}</p>
                       </div>
                       <div className='ml-auto text-right'>
-                        <p className='text-md'>${items.price}</p>
+                        <p className='text-md'>₹{items.price}</p>
                         <p className='text-sm text-gray-500'>Qty:{items.quantity}</p>
                       </div>
                   </div>

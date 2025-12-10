@@ -5,12 +5,14 @@ import SearchBar from "./SearchBar";
 import CartScroller from "../layout/CartScroller";
 import { useCart } from "../../context/CartContext";
 import logo from "../../assets/Elanic.png";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const location = useLocation();
   const { totalItems } = useCart();
+  const {user}=useSelector((state)=>state.auth)
 
   const toggleCart = () => {
     setCartOpen(!cartOpen);
@@ -44,9 +46,11 @@ const Navbar = () => {
 
           {/* Icons */}
           <div className="flex items-center space-x-3">
-            <Link to="/admin" className="hidden md:block text-white text-xs bg-black px-3 py-1 rounded-full">
-              Admin
-            </Link>
+            {user && user.role==="admin" && (
+               <Link to="/admin" className="hidden md:block text-white text-xs bg-black px-3 py-1 rounded-full">
+               Admin
+             </Link>
+            )}
             <button
               className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition relative"
               onClick={toggleCart}
