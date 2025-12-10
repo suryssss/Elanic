@@ -11,7 +11,7 @@ const Login = () => {
     const dispatch=useDispatch()
     const navigate=useNavigate()
     const location=useLocation()
-    const {user,guestId}=useSelector((state)=>state.auth)
+    const {user,guestId,loading}=useSelector((state)=>state.auth)
     const {cart}=useSelector((state)=>state.cart)
 
     const redirect=new URLSearchParams(location.search).get("redirect") || "/";
@@ -68,7 +68,7 @@ const Login = () => {
                 <button 
                 type='submit' 
 
-                className='w-full bg-black text-white p-2 rounded-lg hover:bg-gray-800 transition-colors'>Sign In</button>
+                className='w-full bg-black text-white p-2 rounded-lg hover:bg-gray-800 transition-colors'>{loading ? "loading..." : "Sign In"}</button>
                 <p className='mt-6 text-center text-sm'>Dont have an account?{" "}
                     <Link to={`/register?redirect=${encodeURIComponent(redirect)}`} className='text-black font-semibold hover:underline'>Register</Link>
                 </p>
