@@ -29,7 +29,27 @@ router.post("/", protect, admin, async (req, res) => {
       sku,
     } = req.body;
 
-    
+    const product = new Product({
+      name,
+      description,
+      discountPrice,
+      price,
+      stock,
+      category,
+      brand,
+      sizes,
+      colors,
+      collections,
+      material: materials,
+      gender,
+      images,
+      isFeatured,
+      isPublished,
+      tags,
+      dimensions,
+      weight,
+      sku,
+    });
 
     const createdProduct = await product.save();
     res.status(201).json(createdProduct);
@@ -279,8 +299,15 @@ router.get('/similar/:id', async (req, res) => {
   }
 })
 
+// This route must be last to avoid matching specific routes like /new-arrivals, /best-seller, etc.
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
+  
+  // Reject common route names that shouldn't be treated as IDs
+  const reservedRoutes = ['new-arrivals', 'best-seller', 'similar'];
+  if (reservedRoutes.includes(id)) {
+    return res.status(404).json({ message: "Route not found" });
+  }
   
   if (!id || id === 'undefined' || id === 'null') {
     return res.status(400).json({ message: "Product ID is required" });

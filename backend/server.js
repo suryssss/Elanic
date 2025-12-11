@@ -18,13 +18,17 @@ const adminOrderRoute = require("./routes/adminOrderRoute");
 
 const app = express();
 
-app.use(express.json());
-
+// CORS must be configured before other middleware
 app.use(cors({
   origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  credentials: false, // Set to false when using origin: "*"
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 }));
+
+app.use(express.json());
 
 connectDB();
 
