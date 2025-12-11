@@ -38,12 +38,12 @@ const handleCreateCheckout=async(e)=>{
     try{
       const totalPrice=cart.totalPrice ?? totalAmount
       const res=await dispatch(createCheckout({
-        checkoutData:{
-          checkoutItems:cart.products,
-          shippingAddress,
-          paymentMethod:"PayPal",
+      checkoutData:{
+        checkoutItems:cart.products,
+        shippingAddress,
+        paymentMethod:"PayPal",
           totalPrice,
-        }
+      }
       })).unwrap()
       if(res && res._id){
         setCheckoutId(res._id)

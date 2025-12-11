@@ -174,33 +174,33 @@ async function handleMerge(req,res,guestIdParam){
             return res.status(200).json(emptyCart)
         }
 
-        if (userCart){
-            guestCart.products.forEach((guestItem)=>{
-                const productIdx=userCart.products.findIndex((item)=>
+            if (userCart){
+                guestCart.products.forEach((guestItem)=>{
+                    const productIdx=userCart.products.findIndex((item)=>
                     item.productId.toString()===guestItem.productId.toString() && 
                     item.size===guestItem.size && 
                     item.color===guestItem.color)
-                if (productIdx>-1){
-                    userCart.products[productIdx].quantity+=guestItem.quantity
-                }else{
-                    userCart.products.push(guestItem)
-                }
-            })
-            userCart.totalPrice=userCart.products.reduce((acc,item)=>acc+item.price*item.quantity,0)
-            await userCart.save()
+                    if (productIdx>-1){
+                        userCart.products[productIdx].quantity+=guestItem.quantity
+                    }else{
+                        userCart.products.push(guestItem)
+                    }
+                })
+                userCart.totalPrice=userCart.products.reduce((acc,item)=>acc+item.price*item.quantity,0)
+                await userCart.save()
 
-            try {
+                try {
                 if (guestId) await Cart.findOneAndDelete({guestId})
-            } catch (error) {
-                console.error("Error deleting guest cart",error)
-            }
+                } catch (error) {
+                    console.error("Error deleting guest cart",error)
+                }
             return res.status(200).json(userCart)
-        }else{
-            guestCart.user=req.user._id
-            guestCart.guestId=undefined
-            await guestCart.save()
+            }else{
+                guestCart.user=req.user._id
+                guestCart.guestId=undefined
+                await guestCart.save()
             return res.status(200).json(guestCart)
-        }
+            }
     } catch (error) {
         console.error("Error merging carts",error)
         return res.status(500).send("Server Error")

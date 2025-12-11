@@ -26,8 +26,6 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"],
 }));
 
-app.options("*", cors());
-
 connectDB();
 
 app.get("/", (req, res) => {
