@@ -36,14 +36,14 @@ PayPal Checkout API
 Frontend: Vercel <br />
 Backend: Render
 
-#🌐 Live Demo
+# Live Demo
 
 Frontend: https://elanic.vercel.app/<br />
 Backend API: https://elanic-backend.onrender.com/
 
 Live payment + admin flows separate Elanic from beginner projects.
 
-#📂 Project Structure
+#Project Structure
 ```
 elanic/
 │── frontend/
@@ -63,7 +63,7 @@ elanic/
 └── README.md
 ```
 
-#⚙️ Installation & Setup
+#Installation & Setup
 Clone Repository
 ```
 git clone https://github.com/your-username/elanic.git
@@ -92,7 +92,7 @@ npm install
 npm run dev
 ```
 
-#🔐 Environment Variables <br/>
+#Environment Variables <br/>
 Variable	Description <br/>
 MONGO_URI	MongoDB connection string <br/>
 JWT_SECRET	Authentication secret <br/>
