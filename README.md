@@ -38,8 +38,8 @@ Backend: Render
 
 #🌐 Live Demo
 
-Frontend: https://elanic-uhme-s5s18s2oo-rithwik-suryas-projects.vercel.app<br />
-Backend API: https://elanic-api.onrender.com
+Frontend: https://elanic.vercel.app/<br />
+Backend API: https://elanic-backend.onrender.com/
 
 Live payment + admin flows separate Elanic from beginner projects.
 
