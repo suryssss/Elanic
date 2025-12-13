@@ -1,7 +1,7 @@
- Elanic – Full-Stack E-Commerce Platform
+# Elanic – Full-Stack E-Commerce Platform
 Elanic is a full-stack e-commerce web application built to deliver a modern online shopping experience with secure authentication, product management, and seamless checkout flows.
 
-🚀 Core Features
+# Core Features
 User Features
 User authentication & authorization (JWT)
 Product browsing with categories
@@ -10,13 +10,13 @@ Secure PayPal payment gateway integration
 Order placement & order history tracking
 Responsive UI across devices
 
-Admin Features
+#Admin Features
 Admin dashboard
 Product management (create, update, delete)
 Order management & status updates
 View all users and orders
 
-🛠️ Tech Stack
+# Tech Stack
 Frontend
 React / Next.js
 Tailwind CSS
@@ -35,14 +35,14 @@ Deployment
 Frontend: Vercel
 Backend: Render
 
-🌐 Live Demo
+#🌐 Live Demo
 
 Frontend: https://elanic-uhme-s5s18s2oo-rithwik-suryas-projects.vercel.app
 Backend API: https://elanic-api.onrender.com
 
 Live payment + admin flows separate Elanic from beginner projects.
 
-📂 Project Structure
+#📂 Project Structure
 ```
 elanic/
 │── frontend/
@@ -62,7 +62,7 @@ elanic/
 └── README.md
 ```
 
-⚙️ Installation & Setup
+#⚙️ Installation & Setup
 Clone Repository
 ```
 git clone https://github.com/your-username/elanic.git
@@ -91,31 +91,12 @@ npm install
 npm run dev
 ```
 
-🔐 Environment Variables
+#🔐 Environment Variables
 Variable	Description
 MONGO_URI	MongoDB connection string
 JWT_SECRET	Authentication secret
 PAYPAL_CLIENT_ID	PayPal payment integration
 API_URL	Backend API base URL
-🧾 Payments
-
-Integrated PayPal Checkout
-
-Secure transaction flow
-
-Payment status stored per order
-
-This is not mocked — it’s a real payment flow.
-
-📊 Admin Dashboard
-
-Centralized admin panel
-
-Order tracking & status management
-
-Product and user control
-
-This shows you understand role-based access control.
 
 Variable	Description
 MONGO_URI	MongoDB connection string
