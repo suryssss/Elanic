@@ -65,6 +65,7 @@ Backend API: https://elanic-api.onrender.com
 Live payment + admin flows separate Elanic from beginner projects.
 
 📂 Project Structure
+```
 elanic/
 │── frontend/
 │   ├── components/
@@ -81,29 +82,36 @@ elanic/
 │   └── server.js
 │
 └── README.md
+```
 
 ⚙️ Installation & Setup
 Clone Repository
+```
 git clone https://github.com/your-username/elanic.git
 cd elanic
+```
 
 Backend Setup
+```
 cd backend
 npm install
 npm run dev
-
+```
 
 Create a .env file:
-
+```
 MONGO_URI=your_mongodb_uri
 JWT_SECRET=your_jwt_secret
 PAYPAL_CLIENT_ID=your_paypal_client_id
 PORT=5000
+```
 
 Frontend Setup
+```
 cd frontend
 npm install
 npm run dev
+```
 
 🔐 Environment Variables
 Variable	Description
