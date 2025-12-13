@@ -1,7 +1,7 @@
 # Elanic – Full-Stack E-Commerce Platform
-```
+
 Elanic is a full-stack e-commerce web application built to deliver a modern online shopping experience with secure authentication, product management, and seamless checkout flows.
-```
+
 # Core Features
 -User Features
 ```
