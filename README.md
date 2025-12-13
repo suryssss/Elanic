@@ -92,8 +92,8 @@ npm install
 npm run dev
 ```
 
-#🔐 Environment Variables
-Variable	Description
+#🔐 Environment Variables <br/>
+Variable	Description <br/>
 MONGO_URI	MongoDB connection string <br/>
 JWT_SECRET	Authentication secret <br/>
 PAYPAL_CLIENT_ID	PayPal payment integration <br/>
