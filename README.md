@@ -94,15 +94,8 @@ npm run dev
 
 #🔐 Environment Variables
 Variable	Description
-MONGO_URI	MongoDB connection string
-JWT_SECRET	Authentication secret
-PAYPAL_CLIENT_ID	PayPal payment integration
+MONGO_URI	MongoDB connection string <br/>
+JWT_SECRET	Authentication secret <br/>
+PAYPAL_CLIENT_ID	PayPal payment integration <br/>
 API_URL	Backend API base URL
-
-Variable	Description
-MONGO_URI	MongoDB connection string
-JWT_SECRET	JWT authentication secret
-
-
-API_URL	Backend API URL
 
