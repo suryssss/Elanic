@@ -2,7 +2,7 @@
 Elanic is a full-stack e-commerce web application built to deliver a modern online shopping experience with secure authentication, product management, and seamless checkout flows.
 
 # Core Features
-User Features
+-User Features
 User authentication & authorization (JWT)
 Product browsing with categories
 Cart management
@@ -10,29 +10,30 @@ Secure PayPal payment gateway integration
 Order placement & order history tracking
 Responsive UI across devices
 
-#Admin Features
+-Admin Features
 Admin dashboard
 Product management (create, update, delete)
 Order management & status updates
 View all users and orders
 
 # Tech Stack
-Frontend
-React / Next.js
-Tailwind CSS
-Axios
+-Frontend
+React <br />
+Tailwind CSS<br />
+Axios<br />
 
-Backend
-Node.js
-Express.js
-MongoDB & Mongoose
-JWT Authentication
+-Backend
+Node.js<br />
+Express.js<br />
+MongoDB & Mongoose<br />
+JWT Authentication<br />
 
-Payments
+
+-Payments
 PayPal Checkout API
 
-Deployment
-Frontend: Vercel
+-Deployment
+Frontend: Vercel <br />
 Backend: Render
 
 #🌐 Live Demo
